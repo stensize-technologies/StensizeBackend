@@ -7,7 +7,21 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const allowedOrigins = [
+  "https://stensize.com"
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use(bodyParser.json());
 
 // Contact form endpoint
